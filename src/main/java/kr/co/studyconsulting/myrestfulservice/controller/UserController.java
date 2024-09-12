@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController//컨트롤러로 사용할 수 있는 빈 어노테이션
 public class UserController {
-    private UserDaoService service;
+    private final UserDaoService service;
 
     public UserController(UserDaoService service) {
         this.service = service;
