@@ -2,6 +2,7 @@ package kr.co.studyconsulting.myrestfulservice.controller;
 
 import kr.co.studyconsulting.myrestfulservice.bean.User;
 import kr.co.studyconsulting.myrestfulservice.dao.UserDaoService;
+import kr.co.studyconsulting.myrestfulservice.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,9 +23,14 @@ public class UserController {
         return service.findAll();
     }
 
-    @GetMapping("/users/{id}") //전체 사용자를 가져올 어노테이션
-    public User retrieveAllUsers(@PathVariable int id) {
-        return service.findOne(id);
+    @GetMapping("/users/{id}") //ID에 맞는 정보를 가져올 어노테이션
+    public User retrieveUser(@PathVariable int id) {
+        User user = service.findOne(id);
+
+        if(user == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+        return user;
     }
 
     @PostMapping("/users") // 사용자들 요청값을 변환해주기 위해서 ResponseEntity 활용
@@ -38,5 +44,4 @@ public class UserController {
 
         return ResponseEntity.created(location).build();
     }
-
 }
